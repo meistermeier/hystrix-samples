@@ -8,3 +8,4 @@ Here are some samples that visualize the usage of [Netflix Hystrix][hystrix].
 [blog package](src/main/java/com/meistermeier/hystrix/blog)
 
 [hystrix]: https://github.com/Netflix/Hystrix
+
