@@ -3,6 +3,8 @@ package com.meistermeier.hystrix.blog.service;
 import com.meistermeier.hystrix.blog.domain.BlogPost;
 import com.meistermeier.hystrix.blog.persistence.BlogPostRepository;
 import com.netflix.hystrix.HystrixCollapser;
+import com.netflix.hystrix.HystrixCollapserKey;
+import com.netflix.hystrix.HystrixCollapserProperties;
 import com.netflix.hystrix.HystrixCommand;
 
 import java.util.ArrayList;
@@ -10,12 +12,15 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
 public class BlogPostCollapsedCommand extends HystrixCollapser<List<BlogPost>, BlogPost, Integer> {
 
     private final BlogPostRepository blogPostRepository;
     private final Integer entryId;
 
     public BlogPostCollapsedCommand(BlogPostRepository blogPostRepository, Integer entryId) {
+        super(Setter.withCollapserKey(HystrixCollapserKey.Factory.asKey("blogPostCollapser")).andCollapserPropertiesDefaults(
+                HystrixCollapserProperties.Setter().withTimerDelayInMilliseconds(1000)));
         this.blogPostRepository = blogPostRepository;
         this.entryId = entryId;
     }
@@ -33,6 +38,7 @@ public class BlogPostCollapsedCommand extends HystrixCollapser<List<BlogPost>, B
         entryIds.addAll(collapsedRequests.stream().map(CollapsedRequest::getArgument)
                 .collect(Collectors.toList()));
 
+        System.out.println("collapsing " + entryIds.size() + " entry ids.");
         return new BlogPostBatchCommand(blogPostRepository, entryIds);
     }
 

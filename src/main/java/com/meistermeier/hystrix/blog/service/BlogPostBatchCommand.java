@@ -21,6 +21,7 @@ public class BlogPostBatchCommand extends HystrixCommand<List<BlogPost>> {
 
     @Override
     protected List<BlogPost> run() throws Exception {
+        System.out.println(entryIds.size());
         return blogPostRepository.loadAll(entryIds);
     }
 }

@@ -8,10 +8,12 @@ import java.util.List;
 public class BlogPostRepository {
 
     public List<BlogPost> loadAll(List<Integer> ids) {
-        return new ArrayList<>();
+        ArrayList<BlogPost> blogPosts = new ArrayList<>(ids.size());
+        for (Integer ignored : ids) {
+            BlogPost blogPost = new BlogPost();
+            blogPosts.add(blogPost);
+        }
+        return blogPosts;
     }
 
-    public BlogPost load(Integer id) {
-        return new BlogPost();
-    }
 }
